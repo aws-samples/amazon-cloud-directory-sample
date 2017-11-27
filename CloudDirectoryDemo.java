@@ -116,7 +116,7 @@ public class CloudDirectoryDemo {
 	    	// Please store your password or AWS secrets under your profile within your IDE. Please do not 
 	    	// put the secrets within the source file, to avoid any misuse of your secrets. 
 	    	// 
-	    	awsCredential = new ProfileCredentialsProvider("chheda");
+	    	awsCredential = new ProfileCredentialsProvider("profile_id");
 	    } catch (Exception e) 
 	    {
 	        throw new AmazonClientException(
