@@ -13,7 +13,7 @@
  * with objects and then runs queries against the directory. At the end, all objects, schema and directory are deleted. 
  */
 
-package clouddirectorydemo;
+package com.amazonaws.samples.clouddirectorydemo;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -116,7 +116,7 @@ public class CloudDirectoryDemo {
 	    	// Please store your password or AWS secrets under your profile within your IDE. Please do not 
 	    	// put the secrets within the source file, to avoid any misuse of your secrets. 
 	    	// 
-	    	awsCredential = new ProfileCredentialsProvider("profile_id");
+	    	awsCredential = new ProfileCredentialsProvider("default");
 	    } catch (Exception e) 
 	    {
 	        throw new AmazonClientException(
@@ -136,6 +136,7 @@ public class CloudDirectoryDemo {
         }
 	    catch (Exception e) 
 	    {
+	        e.printStackTrace();
 	        throw new AmazonClientException(
 	            "Cloud Directory Exception ",
 	            e);
