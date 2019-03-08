@@ -7,13 +7,13 @@
 //        http://aws.amazon.com/apache2.0/
 //
 //    or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
+    
 /**
  * This is sample code for Amazon Cloud Directory. The sample code creates a schema, creates a directory, populates the directory 
  * with objects and then runs queries against the directory. At the end, all objects, schema and directory are deleted. 
  */
 
-package clouddirectorydemo;
+package com.amazonaws.samples.clouddirectorydemo;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -37,10 +37,10 @@ import com.amazonaws.services.clouddirectory.model.*;
 public class CloudDirectoryDemo {
 
 	/**
-	 * Define enums for types of group, employee role and office type.
+	 * Define enums for types of group, employee role and office type. 
 	 */
 
-	// Defining group type for different levels of the organization
+	// Defining group type for different levels of the organization 
     enum GroupType {
         ORGANIZATION("organization"),
         DEPARTMENT("department"),
@@ -91,58 +91,58 @@ public class CloudDirectoryDemo {
     }
 
     private final AmazonCloudDirectory cloudDirectoryClient;
-
-    private static final String SCHEMA_NAME = "Organization_Demo2";
-
+    
+    private static final String SCHEMA_NAME = "Organization_Demo";  
+    
     // Schema version is user-defined string. You can define a version identifier that is suitable for your use case
-    private static final String SCHEMA_VERSION = "1.0";
-    private static final String DIRECTORY_NAME = "Cloud_Corp2"; // You can give a friendly name to each instance of your directory
+    private static final String SCHEMA_VERSION = "1.0"; 
+    private static final String DIRECTORY_NAME = "Cloud_Corp"; // You can give a friendly name to each instance of your directory
 
     // Defining variables to hold ARN for different schema states. To learn more about schema states, please visit 
     // http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html 
-
+    
     private String developmentSchemaArn;
     private String publishedSchemaArn;
     private String appliedSchemaArn;
     private String directoryArn;
-
+    
     public static AWSCredentialsProvider awsCredential = null;
 
-    public static void main(String[] args)
+    public static void main(String[] args) 
     {
         System.out.println("Cloud Directory demo start");
-	    try
+	    try 
 	    {
-	    	// Please store your password or AWS secrets under your profile within your IDE. Please do not
-	    	// put the secrets within the source file, to avoid any misuse of your secrets.
-	    	//
+	    	// Please store your password or AWS secrets under your profile within your IDE. Please do not 
+	    	// put the secrets within the source file, to avoid any misuse of your secrets. 
+	    	// 
 	    	awsCredential = new ProfileCredentialsProvider("default");
-	    } catch (Exception e)
+	    } catch (Exception e) 
 	    {
 	        throw new AmazonClientException(
 	            "Cannot load the credentials from the credential profiles file. " +
 	            "Please make sure that your credentials file is at the correct " +
 	            "location, and is in valid format.",
 	            e);
-	    } // try-catch
+	    } // try-catch    
+	    
+        CloudDirectoryDemo demo = new CloudDirectoryDemo(); 
 
-        CloudDirectoryDemo demo = new CloudDirectoryDemo();
-
-	    try
+	    try 
 	    {
             demo.buildSchema(); // This method is used to develop and publish a schema 
             demo.buildOrg(); // This method is used to populate a directory with employees
             demo.queryOrg(); // This method is used to query our data from the directory 
         }
-	    catch (Exception e)
+	    catch (Exception e) 
 	    {
 	        e.printStackTrace();
 	        throw new AmazonClientException(
 	            "Cloud Directory Exception ",
 	            e);
-	    } // try-catch
+	    } // try-catch    
 	    finally {
-            demo.cleanUp(); // This method will clean (delete) all the data that we created in the program in Cloud Directory
+            demo.cleanUp(); // This method will clean (delete) all the data that we created in the program in Cloud Directory  
         }
     } // main
 
@@ -172,7 +172,7 @@ public class CloudDirectoryDemo {
         cloudDirectoryClient.createFacet(new CreateFacetRequest()
                 .withName("group_facet")
                 .withSchemaArn(developmentSchemaArn)
-                .withObjectType(ObjectType.NODE)
+                .withObjectType(ObjectType.NODE)   
                 .withAttributes(getRequiredMutableStringAttributeWithNames("group_type")));
 
         // "Region" facet
@@ -205,7 +205,7 @@ public class CloudDirectoryDemo {
         		.withDevelopmentSchemaArn(developmentSchemaArn)
                 .withVersion(SCHEMA_VERSION))
         		.getPublishedSchemaArn();
-
+        
         String schemaAsJson = cloudDirectoryClient
         		.getSchemaAsJson(new GetSchemaAsJsonRequest().withSchemaArn(publishedSchemaArn))
         		.getDocument();
@@ -281,17 +281,17 @@ public class CloudDirectoryDemo {
         linkEmployeeToOffice("/locations/americas/usa/seattle", carl);
         linkEmployeeToOffice("/locations/americas/usa/seattle", darryl);
         linkEmployeeToOffice("/locations/americas/usa/seattle", edith);
-
+        
         // QA team in Houston
         linkEmployeeToOffice("/locations/americas/usa/houston", frank);
         linkEmployeeToOffice("/locations/americas/usa/houston", kelly);
         linkEmployeeToOffice("/locations/americas/usa/houston", lauren);
-
+        
         // Management in NYC
         linkEmployeeToOffice("/locations/americas/usa/nyc", gordon);
         linkEmployeeToOffice("/locations/americas/usa/nyc", herbert);
         linkEmployeeToOffice("/locations/americas/usa/nyc", irene);
-
+        
         // Researchers in Cape Town
         linkEmployeeToOffice("/locations/emea/south_africa/cape_town", john);
         linkEmployeeToOffice("/locations/emea/south_africa/cape_town", abbie);
@@ -368,7 +368,7 @@ public class CloudDirectoryDemo {
                 + findParentPathsWithPrefix("/organization", Collections.singleton(objectId(herbertObjectId))));
     } // queryOrg
 
-    private void cleanUp()
+    private void cleanUp() 
     {
         System.out.println(">> Cleaning up schema & directory...");
 
@@ -383,13 +383,13 @@ public class CloudDirectoryDemo {
         cloudDirectoryClient.deleteDirectory(new DeleteDirectoryRequest().withDirectoryArn(directoryArn));
     } // cleanUp
 
-
+    
 /*****************************************************************************************************************
- *
+ * 
  * Helper functions
- *
+ * 
  ****************************************************************************************************************/
-
+    
     private List<IndexAttachment> findEmployeeWithName(String prefix) {
         TypedAttributeValueRange prefixRange = new TypedAttributeValueRange()
                 .withStartMode(RangeMode.INCLUSIVE)
@@ -441,11 +441,11 @@ public class CloudDirectoryDemo {
     // Serializable consistency level gives read-after-write consistency but they will have higher latencies
     // Eventual consistency level offer fast read operations (lower latencies) 
     // More information can be read at http://docs.aws.amazon.com/directoryservice/latest/admin-guide/consistencylevels.html 
-
+    
     private Map<String, String> children(String objectPath) {
         return cloudDirectoryClient.listObjectChildren(new ListObjectChildrenRequest()
                 .withDirectoryArn(directoryArn)
-                .withConsistencyLevel(ConsistencyLevel.SERIALIZABLE)
+                .withConsistencyLevel(ConsistencyLevel.SERIALIZABLE) 
                 .withMaxResults(10)
                 .withObjectReference(path(objectPath))).getChildren();
     } // children
@@ -555,7 +555,7 @@ public class CloudDirectoryDemo {
                 .withKey(attributeKey(facetName, attributeName))
                 .withValue(new TypedAttributeValue().withStringValue(attributeValue));
     } // attributeKeyAndStringValue
-
+    
     private AttributeKey attributeKey(String facetName, String attributeName) {
         return new AttributeKey()
         		.withSchemaArn(appliedSchemaArn)
